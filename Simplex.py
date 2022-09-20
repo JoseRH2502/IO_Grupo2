@@ -1,3 +1,4 @@
+import sys
 def esNegativo(elemento):
     temp = elemento.split('-')
     if(len(temp) == 2):
@@ -14,7 +15,6 @@ def limpiarTexto(list):
         elif (list[i].isdigit() or esNegativo(list[i])):
             list[i] = int(list[i])
     return list
-
 
 def leerTxt(directorio):
     if(isinstance(directorio, str)):
@@ -79,19 +79,46 @@ def mostrarMatriz(matriz):
     for i in matriz:
         for j in i:
             print(j)
+
 def mostrarProblema(matriz):
     for i in matriz:
         print(i)
 
+
+def esColumnaPivote(matriz):
+    columnaPivote = 1
+    for i in range(1, len(matriz[1])):
+        if (matriz[1][i] <= matriz[1][columnaPivote]):
+            columnaPivote = i
+
+    return columnaPivote
+
+def noAcotada(col, matriz):
+    for i in range(2, len(matriz)):
+        try:
+            if (matriz[i][-1] / matriz[i][col] >= 0):
+                return False
+        except ZeroDivisionError:
+            print('Division entre cero')
+    return True
+
 def main():
-    #directorio = input("Ingrese un archivo de texto: ")
-    directorio = "C:\\Users\\Jose\\Documents\\IO_Grupo2\\input_files\\problema1.txt"
-    problema = leerTxt(directorio)
+    columnaPivote = 0
+    archivo = sys.argv[2] # al ejecutar en terminal " python3 Simplex.py -h Problema1.txt " 
+    problema = leerTxt(archivo)
     matriz = generarMatriz(problema[0][2], problema[0][3])
     numRestrictions =  problema[0][-1]
     numFunObjetiveVal =  problema[0][-2]
     full = llenarMatriz( generarMatriz(numRestrictions + 2, (numFunObjetiveVal + numRestrictions) + 2), problema[1:]) 
+    print("Matriz generada:")
     mostrarProblema(full)
+    print(" ")
+
+    columnaPivote = esColumnaPivote(matriz)   # se calcula la columna pivote
+    if(noAcotada(columnaPivote, matriz)):    # se valida no esta acotada y termina el simplex
+            print("Problema no acotado, favor revisar el archivo de salida")
+
+ 
     
 
 main()
