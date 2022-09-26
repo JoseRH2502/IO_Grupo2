@@ -72,7 +72,8 @@ def degenerada(col, matriz):
             if (matriz[i][-1] / matriz[i][col] >= 0):
                 degenerada.append(round(matriz[i][-1] / matriz[i][col], 3))
         except ZeroDivisionError:
-            print('Divicion entre cero')
+           print('Divicion entre cero')
+          
     for j in range(len(degenerada)):
         for k in range(len(degenerada)):
             if(degenerada[j] == degenerada[k] and k > j):
@@ -88,6 +89,7 @@ def noAcotada(col, matriz):
                 return False
         except ZeroDivisionError:
             print('Divicion entre cero')
+            print("noacotada")
     return True
 
 # funcion para validar si hay mas de una solucion
@@ -104,7 +106,7 @@ def multiSolucion(matriz):
                 print('Este Problema tiene soluciones multiples')
                 salida = 'Este Problema tiene soluciones multiples'
                 return salida
-    return ""
+    return "Solucion unica"
 
 
 #Esta es la funcion principal donde se ejecuta todas las operaciones con la matriz
@@ -116,11 +118,12 @@ def solution(matriz,funcionObjetivo):
     saliente = ''
     estado = 1
     registro = str(imprimeMatriz(matriz)) + str("\n")
+    respuesta = ''
     contador = 0
     esdegenerada = ''
-    mostrarProblema(matriz)
     print("\n")
     # En este ciclo vamos a relaizar todas las iteraciones de nuestro simplex
+    # Mientras haya iteracion
     while (esSolucion(matriz)):
 
         columnapivote = columnaPivote(matriz)   # se calcula la columna pivot
@@ -136,25 +139,33 @@ def solution(matriz,funcionObjetivo):
         saliente = matriz[filapivote][0]     # se saca la variable que sale
         matriz = operacion(matriz, columnapivote, filapivote, numpivote, entrante)   # se reliazan las operaciones en la matriz
         # se comienza a construir la salida
-        registro += 'VB entrante: ' + str(entrante) + "\t"+', ' + 'VB saliente: ' + str(
+    
+        respuesta += 'VB entrante: ' + str(entrante) + "\t"+', ' + 'VB saliente: ' + str(
             saliente) +  ", "+'Número Pivot: ' + str(round(numpivote, 4)) + "\n"
-        registro += 'Estado: ' + str(estado) + "\n"
-        registro += 'Respuesta Parcial: U = ' + str(matriz[1][-1]) + ', ' + solucionObjetivo(matriz)
-        registro += "\n"
-        registro += imprimeMatriz(matriz)
-        registro += "\n"
+        respuesta += 'Estado: ' + str(estado) + "\n"
+        respuesta += 'Respuesta Parcial: U = ' + str(matriz[1][-1]) + ', ' + solucionObjetivo(matriz)
+        respuesta += "\n" + "\n" 
+        respuesta += registro
         contador += 1
-        if (not esSolucion(matriz)): # se valida que sea la solucion final para imprimir en consola la ultima tabla
-            print('VB entrante: ' + str(entrante) + "\t" + 'VB saliente: ' + str(
-            ) + "\t" + 'Número Pivot: ' + str(numpivote) )
-            print('Respuesta Parcial: U ' + str(matriz[1][-1]) + ', ' + solucionObjetivo(matriz))
-            print('Estado: ' +"Final")
-            print(imprimeMatriz(matriz))
-            print(esdegenerada)
+        print(respuesta)
+        
+        if (not esSolucion(matriz)): # se valida que sea la solucion final para imprimir en consola la ultima tabla            
+            respuesta += 'VB entrante: ' + str(entrante) + "\t" + 'VB saliente: ' + str(
+            ) + "\t" + 'Número Pivot: ' + str(numpivote)
+            respuesta += "\n"
+            respuesta += 'Estado: ' +"Final"
+            respuesta += "\n"
+            respuesta += 'Respuesta Parcial: U ' + str(matriz[1][-1]) + ', ' + solucionObjetivo(matriz)
+            respuesta += "\n" + "\n" 
+            respuesta += imprimeMatriz(matriz)
+            respuesta += "\n"
+            respuesta += esdegenerada
+
+
     if(rompimientoEmpate(funcionObjetivo)):  # valida si es rompe empate
-        registro += "\n" + "Rompimiento de empates"
+        respuesta += "\n" + "Rompimiento de empates"
     salida = multiSolucion(matriz)   # antes se terminar valida si tiene multiples soluciones
-    return registro + esdegenerada + salida
+    return respuesta + esdegenerada + salida
 
 #Este metodo valida si queda alguna iteracion mas
 def esSolucion(matriz):
@@ -239,7 +250,3 @@ def imprimeMatriz(lista):
                 tabla += str(round(lista[i][j], 4)) + "\t\t"
         tabla += "\n"
     return tabla
-
-def mostrarProblema(matriz):
-    for i in matriz:
-        print(i)
