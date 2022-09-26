@@ -805,7 +805,8 @@ def dosFases(problema):
         global degenerada         
         global noAcotada          
         global noFactible         
-        global solMultiple        
+        global solMultiple   
+        global respuesta     
 
         newMatriz = []
         # Limpia los datos del problema
@@ -865,3 +866,4 @@ def dosFases(problema):
             localrespuesta += "El problema tiene múltiples soluciones óptimas, esta es un ejemplo\n"
 
         print(localrespuesta)
+        return respuesta
