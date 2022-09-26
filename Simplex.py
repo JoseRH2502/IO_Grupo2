@@ -25,7 +25,7 @@ def main():
             print("nombreArchivo: Es el nombre del archivo txt del problema que desea resolver\n")
             print("Nota: Es el importante que el archivo txt se almacene en la carpeta Problemas")
        
-    if nArgumentos == 2:
+    if nArgumentos >= 2:
         if ( archivo[0]+archivo[1] != "-h"):
             print("La intrucción de ejecución debe tener la siguiente estructura: \n")
             print("python Simplex.py nombreArchivo.txt \n")
